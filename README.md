@@ -1,4 +1,5 @@
 💬 Full Stack Chat Application (DevOps Edition)
+
 A real-time chat application built with modern technologies and deployed on Kubernetes (Minikube) with integrated CI/CD (GitHub Actions) and monitoring (Prometheus + Grafana). Designed to showcase DevOps capabilities with scalability, automation, and observability.
 
 🧠 Project Highlights

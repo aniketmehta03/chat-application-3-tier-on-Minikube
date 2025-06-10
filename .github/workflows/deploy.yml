@@ -1,0 +1,60 @@
+name: CI/CD - Chat App Deployment on Minikube
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+         username: ${{ secrets.DOCKER_USERNAME }}
+         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Frontend Docker Image
+      run: |
+        cd frontend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/chatapp-frontend:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/chatapp-frontend:latest
+
+    - name: Build Backend Docker Image
+      run: |
+        cd backend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/chatapp-backend:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/chatapp-backend:latest
+
+    - name:  Set up Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: v1.26.0
+
+    - name:  Set up Minikube Kubeconfig (for local use only)
+      run: |
+        minikube update-context
+        kubectl config view
+
+    - name: Run Cleanup Script
+      run: bash scripts/cleanup.sh
+
+    - name:  Apply Namespaces First
+      run: |
+        kubectl apply -f k8s/namespace.yml
+
+    - name: Deploy Kubernetes Manifests
+      run: |
+        kubectl apply -f k8s/
+
+    - name:  Apply Namespaces First
+      run: |
+        kubectl apply -f monitoring/namespace.yml
+
+    - name: Deploy Monitoring Stack
+      run: |
+        kubectl apply -f monitoring/

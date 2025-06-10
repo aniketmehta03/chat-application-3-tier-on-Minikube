@@ -3,16 +3,15 @@ kind: Ingress
 metadata:
   name: chatapp-ingress
   namespace: chat-app
-
 spec:
   ingressClassName: nginx
   rules:
-      http:
-        paths:
-          - path: /app
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 80
+  - http:
+      paths:
+      - path: /app
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80

@@ -24,14 +24,14 @@ jobs:
     - name: Build Frontend Docker Image
       run: |
         cd frontend
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-frontend:latest .
-        docker push ${{ secrets.DOCKER_USERNAME }}/chatapp-frontend:latest
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-frontend:${{ github.sha }} .
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-frontend:${{ github.sha }}
 
     - name: Build Backend Docker Image
       run: |
         cd backend
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-backend:latest .
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-backend:latest
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-backend:${{ github.sha }} .
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/chatapp-backend:${{ github.sha }}
 
     - name:  Set up Kubectl
       uses: azure/setup-kubectl@v3

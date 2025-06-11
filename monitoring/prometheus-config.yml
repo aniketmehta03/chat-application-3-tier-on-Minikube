@@ -16,8 +16,5 @@ data:
           - targets: ['localhost:9090']
       - job_name: 'chat-app-backend'
         static_configs:
-          - targets: ['backend-service:5000']
-      - job_name: 'kubelet-metrics'
-        static_configs:
-          - targets: ['localhost:10255']
+          - targets: ['backend-service:5001']
 

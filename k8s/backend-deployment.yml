@@ -15,6 +15,10 @@ spec:
       labels:
         app: backend
     spec:
+      initContainers:
+      - name: wait-for-mongodb
+        image: busybox
+        command: ['sh', '-c', 'until nc -z mongodb 27017; do echo "Waiting for MongoDB..."; sleep 3; done;']
       containers:
       - name: chatapp-backend
         image: aniket036/chatapp-backend:latest
